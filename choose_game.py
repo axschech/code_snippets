@@ -4,7 +4,7 @@ import urllib2
 base = 'https://www.humblebundle.com/store/api/humblebundle?page_size=20&request=1'
 
 defaultOptions = {
-	"sort":'bestselling',
+	"sort":'alphabetical',
 	"page": '0'
 }
 
@@ -28,11 +28,25 @@ def assembleURL(options, toStr):
 
 	return url
 
+def assembleData(url):
+	data = []
+	html = urllib2.urlopen(theURL)
+	temp = json.loads(html.read())
+	count = temp['num_pages']
+	print count
+
+	data.append(temp['results'])
+
+	for x in range(0, count):
+		print "\n Getting page " + str(x) + "\n"
+		html = urllib2.urlopen(theURL)
+		temp = json.loads(html.read())
+		data.append(temp['results'])
+
+	print "\n Got data! \n"
+
+	return data
 
 theURL = assembleURL(defaultOptions, base)
-
-html = urllib2.urlopen(theURL)
-
-temp = json.loads(html.read())
-
-data = temp['results']
+print "\n Getting data...\n"
+assembleData(theURL)
