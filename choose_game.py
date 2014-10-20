@@ -9,6 +9,7 @@ defaultOptions = {
 }
 
 
+
 def assembleURL(options, toStr):
 	try:
 		url = str(toStr)
@@ -29,19 +30,29 @@ def assembleURL(options, toStr):
 	return url
 
 def assembleData(url):
+
+	curr_bot = [];
+	curr_mid = [];
+	curr_top = [];
+
 	data = []
 	html = urllib2.urlopen(theURL)
 	temp = json.loads(html.read())
 	count = temp['num_pages']
-	print count
-
-	data.append(temp['results'])
+	# print count
 
 	for x in range(0, count):
-		print "\n Getting page " + str(x) + "\n"
+		print "\n" + str(count - x) + " pages left.. \n"
 		html = urllib2.urlopen(theURL)
 		temp = json.loads(html.read())
-		data.append(temp['results'])
+		for z in range(0, len(temp['results'])):
+
+			obj = {
+				"name":temp['results'][z]['human_name'],
+				"price":temp['results'][z]['current_price'][0],
+				"platforms":temp['results'][z]['platforms']
+			}
+			data.append(obj)
 
 	print "\n Got data! \n"
 
@@ -49,4 +60,6 @@ def assembleData(url):
 
 theURL = assembleURL(defaultOptions, base)
 print "\n Getting data...\n"
-assembleData(theURL)
+data = assembleData(theURL)
+
+print data[0]
