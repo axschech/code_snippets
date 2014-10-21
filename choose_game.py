@@ -4,6 +4,21 @@ import random
 import os.path
 from platform import system
 from time import time
+from HTMLParser import HTMLParser
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(" "+d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 base = 'https://www.humblebundle.com/store/api/humblebundle?page_size=20&request=1'
 
@@ -63,6 +78,7 @@ def assembleData(url):
 
 			obj = {
 				"name":temp['results'][z]['human_name'],
+				"description":temp['results'][z]['description'],
 				"price":temp['results'][z]['current_price'][0],
 				"platforms":temp['results'][z]['platforms']
 			}
@@ -70,7 +86,7 @@ def assembleData(url):
 				curr_bot.append(obj)
 			elif obj['price'] > 5.00 and obj['price'] < 10.00:
 				curr_mid.append(obj)
-			else:
+			else: 
 				curr_top.append(obj)
 
 			# data.append(obj)
@@ -108,23 +124,19 @@ def runQuiz(data):
 	def randNum(length):
 		return random.randint(0,length)
 
-	def questionOne(paramData,platform):
+	def question(paramData,platform):
 		
 		test = 0
-		print platform.lower()
+
 		while(test==0):
 			index = randNum(len(paramData))
-			
-			try:
-				if paramData[index]['platforms'].index(platform.lower()) > -1:
-					test = 1
-			except:
-				test = 0
+			# print paramData[index]
+			if platform.lower() in paramData[index]['platforms']:
+				test = 1
+			else:
+				del paramData[index]
 
-			test = 1
-
-		print index
-		print paramData[index]
+		return paramData[index]
 		# return paramData[index]		
 
 	print "\n Trying to find your platform \n"
@@ -140,7 +152,7 @@ def runQuiz(data):
 		print "\n That's not a choice! \n"
 		return 0
 
-	if os_check.lower()=="no":
+	if os_check.lower()=="no" or os_check.lower()=="n":
 		print "\n What is your platform? \n"
 		os = raw_input("\n | 1: Windows | 2: Mac | 3: Linux | 4: Android | \n")
 		try:
@@ -175,7 +187,11 @@ def runQuiz(data):
 		return 0
 
 	if spend == 1:
-		ret = questionOne(data['low'],os)
+		ret = question(data['low'],os)
+	elif spend == 2:
+		ret = question(data['mid'],os)
+	elif spend == 3:
+		ret = question(data['high'], os)
 
 	return ret
 
@@ -187,8 +203,18 @@ print "\n Running Quiz\n"
 test = 0
 while test==0:
 	quized = runQuiz(data)
-
+	print "\n"+quized['name']+"\n"
+	print "\n"+strip_tags(quized['description'])+"\n"
 	if quized != 0:
+		print "\n Do you like this game? \n"
+		user_check = raw_input("\n Yes / No \n")
+
+	try:
+		str(user_check)
+	except:
+		print "\n That's not a choice! \n"
+
+	if user_check.lower()!="no" and user_check.lower()!="n":
 		test = 1
 
-print quized
+
