@@ -1,6 +1,8 @@
 import json
 import urllib2
+import random
 import os.path
+from platform import system
 from time import time
 
 base = 'https://www.humblebundle.com/store/api/humblebundle?page_size=20&request=1'
@@ -52,7 +54,9 @@ def assembleData(url):
 
 	for x in range(0, count):
 		print "\n" + str(count - x) + " pages left.. \n"
-		html = urllib2.urlopen(theURL)
+		aURL = assembleURL({"sort":"alphabetical","page":str(x)},base);
+		html = urllib2.urlopen(aURL)
+		print aURL
 		temp = json.loads(html.read())
 		records = records + len(temp)
 		for z in range(0, len(temp['results'])):
@@ -99,8 +103,92 @@ def assembleData(url):
 
 	return data
 
+def runQuiz(data):
+	
+	def randNum(length):
+		return random.randint(0,length)
+
+	def questionOne(paramData,platform):
+		
+		test = 0
+		print platform.lower()
+		while(test==0):
+			index = randNum(len(paramData))
+			
+			try:
+				if paramData[index]['platforms'].index(platform.lower()) > -1:
+					test = 1
+			except:
+				test = 0
+
+			test = 1
+
+		print index
+		print paramData[index]
+		# return paramData[index]		
+
+	print "\n Trying to find your platform \n"
+	os = system()
+	if os == "Darwin":
+		os = "Mac"
+	print "\n Is your platform: " + os + "? \n"
+	os_check = raw_input("\n Yes / No \n")
+
+	try:
+		str(os_check)
+	except:
+		print "\n That's not a choice! \n"
+		return 0
+
+	if os_check.lower()=="no":
+		print "\n What is your platform? \n"
+		os = raw_input("\n | 1: Windows | 2: Mac | 3: Linux | 4: Android | \n")
+		try:
+			os = int(os)
+		except:
+			print "That's not a number!"
+			return 0
+
+		if os < 1 or os > 4:
+			print "\n That's not one of the choices \n"
+			return 0
+		if os == 1:
+			os = "Windows"
+		elif os == 2:
+			os = "Mac"
+		elif os == 3:
+			os = "Linux"
+		elif os == 4:
+			os = "Android"
+
+	print "\n How much do you want to spend? \n\n Chose one of the following \n"
+	spend = raw_input("\n | 1: Under 5 dollars | 2: Between 5 and 10 dollars | 3: Over 10 dollars | \n")
+	
+	try:
+		spend = int(spend)
+	except:
+		print "\n That's not a number! \n"
+		return 0
+
+	if spend < 1 or spend > 3:
+		print "\n That's not one of the choices \n"
+		return 0
+
+	if spend == 1:
+		ret = questionOne(data['low'],os)
+
+	return ret
+
 theURL = assembleURL(defaultOptions, base)
 print "\n Getting data...\n"
 data = assembleData(theURL)
 
-print data['low'][0]
+print "\n Running Quiz\n"
+test = 0
+while test==0:
+	quized = runQuiz(data)
+
+	if quized != 0:
+		test = 1
+
+print quized
