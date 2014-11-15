@@ -94,11 +94,11 @@ function run(object, config) {
 	var split_up = getObs(mainObjs);
 	for(var z in split_up) {
 		var items = split_up[z].split('.');
-		console.log(items)
+		//console.log(items)
 	}
 	// console.log(test);
 
-	// return mainObjs;
+	return mainObjs;
 }
 
 
