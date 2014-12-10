@@ -1,0 +1,103 @@
+<html lang="en" ng-app="app">
+<head>
+	
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/hammer.js/1.1.3/hammer.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-animate.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-aria.js"></script>
+
+    <!-- Angular Material Javascript now available via Google CDN; version 0.6 used here -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.min.js"></script>
+
+	<script type="text/javascript">
+		var app = angular.module('app', ['ngMaterial']);
+		app.controller('TestController', function($scope) {
+			$scope.Data = {
+				"Company": {
+					"Name":"Some Cool Company",
+					"Logo":'http://i.imgur.com/yzNc0sH.jpg',
+					"Disclaimer":"This doesn't work yet!"
+				},
+				"Layout": {
+					"Background":"yellow"
+				}	
+			}
+		});
+	</script>
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.css">
+	<style type="text/css">
+		md-input-group.long > input {
+    		width: 350px; 
+		}
+
+		md-input-group.textarea > input {
+			width:350px;
+			height:200px;
+		}
+	</style>
+</head>
+<body>
+	<div ng-controller="TestController">
+		<md-content class="md-padding" layout="row" layout-align="center" style="padding:25px">
+			<md-card flex="50">
+				<div>
+					<form style="padding:20px">
+						<h3>Company Info</h3>
+						<div layout="row">
+							<div flex="33">
+								<md-text-float type="text" label="Company Name" ng-model="Data.Company.Name"></md-text-float>
+							</div>
+							<div flex="66">
+								<md-text-float type="text" label="Company Logo" ng-model="Data.Company.Logo" class="long"></md-text-float>
+							</div>
+							
+						</div>
+						<div layout="row">
+							<md-text-float class="textarea" type="textarea" label="Data.Disclaimer" ng-model="Company.Disclaimer" cols="50" rows="4"></md-text-float>
+						</div>
+						<div layout="column">
+							<div>
+							<h3>
+								Layout
+							</h3>
+							</div>
+							<div>
+							<md-text-float type="text" label="Background Color" ng-model="Data.Layout.Background"></md-text-float>
+							</div>
+						</div>
+							 <md-button class="md-raised">Submit</md-button>
+					</form>
+				</div>
+			</md-card>
+
+			<md-card flex="50" ng-style="{'background-color': Data.Layout.Background}">
+				<div layout="row" layout-align="space-around center">
+					<div flex="50">
+						<h1>{{Data.Company.Name}}</h1>
+					</div>
+					
+					<div flex="25">
+						<img ng-src="{{Data.Company.Logo}}" width="100px" height="100px" />
+					</div>
+				</div>
+				<div layout="row" layout-align="space-around center">
+					{{Data.Company.Disclaimer}}
+				</div>
+
+				<div layout="row" layout-align="space-around center">
+					<form>
+						<md-text-float type="text" label="Username" ng-model="User.Username"></md-text-float>
+					
+						<md-text-float type="text" label="Password" ng-model="User.Password"></md-text-float>
+						<md-button class="md-raised">Login</md-button>
+					</form>
+					
+					
+				</div>
+
+				
+			</md-card>
+		</md-content>
+	</div>
+</body>
+</html>
