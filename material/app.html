@@ -1,14 +1,14 @@
 <html lang="en" ng-app="app">
 <head>
-	
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/hammer.js/1.1.3/hammer.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-animate.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-aria.js"></script>
 
     <!-- Angular Material Javascript now available via Google CDN; version 0.6 used here -->
-    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.min.js"></script>
-
+    <script src="angular-material.min.js"></script>
+    <link rel="stylesheet" href="angular-material.css">
 	<script type="text/javascript">
 		var app = angular.module('app', ['ngMaterial']);
 		app.controller('TestController', function($scope) {
@@ -24,7 +24,7 @@
 			}
 		});
 	</script>
-	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.css">
+	
 	<style type="text/css">
 		md-input-group.long > input {
     		width: 350px; 
@@ -38,7 +38,7 @@
 </head>
 <body>
 	<div ng-controller="TestController">
-		<md-content class="md-padding" layout="row" layout-align="center" style="padding:25px">
+		<md-content class="md-padding" layout="row" layout-sm="column" layout-align="center" style="padding:25px">
 			<md-card flex="50">
 				<div>
 					<form style="padding:20px">
