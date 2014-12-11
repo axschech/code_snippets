@@ -23,6 +23,22 @@
 				}	
 			}
 		});
+
+		app.directive('materialImage', function(){
+		    return function(scope, element, attrs){
+		        var image = attrs.materialImage;
+		        element.css({
+					'background-image': 'url(' + image +')',
+					'background-size' : 'cover',
+					'border-radius': 'inherit',
+					'-webkit-border-radius': 'inherit',
+					'-moz-border-radius': 'inherit'
+		        });
+		    };
+		});
+
+
+
 	</script>
 	
 	<style type="text/css">
@@ -34,6 +50,7 @@
 			width:350px;
 			height:200px;
 		}
+
 	</style>
 </head>
 <body>
@@ -71,16 +88,16 @@
 			</md-card>
 
 			<md-card flex="50" ng-style="{'background-color': Data.Layout.Background}">
-				<div layout="row" layout-align="space-around center">
-					<div flex="50">
-						<h1>{{Data.Company.Name}}</h1>
-					</div>
+				<div layout="row" layout-align="center">
+					<h1>{{Data.Company.Name}}</h1>
 					
+				</div>
+				<div layout="row" layout-align="end center">
 					<div flex="25">
-						<img ng-src="{{Data.Company.Logo}}" width="100px" height="100px" />
+						<md-button class="md-fab" class="material_image" ng-style="{'background-image':'url('+Data.Company.Logo+')','background-size':'cover','height':'100px','width':'100px'}"></md-button>
 					</div>
 				</div>
-				<div layout="row" layout-align="space-around center">
+				<div layout="row" layout-align="center">
 					{{Data.Company.Disclaimer}}
 				</div>
 
