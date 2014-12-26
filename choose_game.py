@@ -24,7 +24,7 @@ base = 'https://www.humblebundle.com/store/api/humblebundle?page_size=20&request
 
 defaultOptions = {
 	"sort":'alphabetical',
-	"page": '0'
+	"page": '0',
 }
 
 
@@ -55,7 +55,7 @@ def assembleData(url):
 
 	html = urllib2.urlopen(theURL)
 	temp = json.loads(html.read())
-	count = temp['num_pages']
+	count = temp['num_results'] / 20
 	records = 0
 	# print count
 	if os.path.isfile('output.json'):
@@ -78,6 +78,7 @@ def assembleData(url):
 
 			obj = {
 				"name":temp['results'][z]['human_name'],
+				"machine_name":temp['results'][z]['machine_name'],
 				"description":temp['results'][z]['description'],
 				"price":temp['results'][z]['current_price'][0],
 				"platforms":temp['results'][z]['platforms']
@@ -203,18 +204,21 @@ print "\n Running Quiz\n"
 test = 0
 while test==0:
 	quized = runQuiz(data)
-	print "\n"+quized['name']+"\n"
-	print "\n"+strip_tags(quized['description'])+"\n"
-	if quized != 0:
-		print "\n Do you like this game? \n"
-		user_check = raw_input("\n Yes / No \n")
+	if quized == 0:
+		test==1
+	else:
+		print "\n"+quized['name']+"\n"
+		print "\n"+strip_tags(quized['description'])+"\n"
+		if quized != 0:
+			print "\n Do you like this game? \n"
+			user_check = raw_input("\n Yes / No \n")
 
-	try:
-		str(user_check)
-	except:
-		print "\n That's not a choice! \n"
+		try:
+			str(user_check)
+		except:
+			print "\n That's not a choice! \n"
 
-	if user_check.lower()!="no" and user_check.lower()!="n":
-		test = 1
-
+		if user_check.lower()!="no" and user_check.lower()!="n":
+			print "\n Go here to buy: http://humblebundle.com/store/p/"+quized['machine_name'].replace(" ","")+" \n"
+			test = 1
 
