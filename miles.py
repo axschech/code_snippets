@@ -1,15 +1,16 @@
 import json
 import time
 
-
-f = open('miles.json', 'r+')
+try:
+    f = open('miles.json', 'r+')
+except Exception, e:
+    f = open('miles.json', 'a+')
 
 try:
     text = f.read()
     data = json.loads(text);
 
 except Exception, e:
-    print e
     data = [{
         "last_mile": 0,
         "total_miles": 45000,
@@ -26,8 +27,13 @@ total_miles = datum['total_miles']
 
 datetime = datum['datetime']
 
-miles = int(raw_input('Miles? \n'))
-if int(miles) < int(last_mile):
+try:
+    miles = int(raw_input('Miles? \n'))
+except Exception, e:
+    print "That is not a number! \n"
+    exit()
+
+if int(miles) <= int(last_mile):
     print "The last recorded milage was: " + str(last_mile) + "\n"
     print "Please enter a value greater than that"
     exit()
