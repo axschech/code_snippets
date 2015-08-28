@@ -1,6 +1,27 @@
 import json
 import time
 
+total_miles = 45000
+montly = total_miles / 12 / 3
+overage = .15
+start = "2015 08 10"
+
+pattern = '%Y %m %d'
+
+def toUnixTime(inStr):
+    return int(time.mktime(time.strptime(inStr, pattern)))
+
+month = time.strftime('%m')
+
+first_of_month_str = str(time.strftime('%Y')) + " " + str(time.strftime('%m')) + " 1"
+first_of_month = toUnixTime(first_of_month_str)
+
+print first_of_month
+
+# def get_monthly(input):
+
+
+
 try:
     f = open('miles.json', 'r+')
 except Exception, e:
@@ -13,17 +34,12 @@ try:
 except Exception, e:
     data = [{
         "last_mile": 0,
-        "total_miles": 45000,
-        "datetime": time.strftime('%c')
+        "datetime": time.strftime(pattern)
     }]
-
-print data
 
 datum = data[-1]
 
 last_mile = datum['last_mile']
-
-total_miles = datum['total_miles']
 
 datetime = datum['datetime']
 
@@ -47,8 +63,7 @@ print theStr
 
 data.append({
     "last_mile": miles,
-    "total_miles": 45000,
-    "datetime": time.strftime('%c')
+    "datetime": time.strftime(pattern)
 })
 f.seek(0)
 f.write(unicode(json.dumps(data, ensure_ascii=False)))
