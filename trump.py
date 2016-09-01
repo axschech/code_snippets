@@ -1,11 +1,19 @@
 import requests
-import urllib2
+from config import config
 
 base_url = 'https://api.twitter.com/'
-config = {
-	'consumer_key': urllib2.quote('xcPk5b9zaw8Nex5217AVKenlq'),
-	'consumer_secret': urllib2.quote('DQu8zn1ckINHEmTbkc7iJY5CRBB4SHBDQKIHqt3G427mBRoheF')
-}
+limit = 200
+
+class Punctuation:
+	items = {
+		'!': 0,
+		'?': 0,
+		',': 0,
+		'.': 0
+	}
+	def count(self, string):
+		for key, val in self.items.iteritems():
+			self.items[key] = val + string.count(key)
 
 class BaseRequest:
 	def __init__(self, base_url, resource, config):
@@ -33,36 +41,37 @@ class Auth(BaseRequest):
 		response = r.json()
 		headers['Authorization'] = 'Bearer ' + response['access_token']
 		return headers
-		
+
 
 class Tweets(BaseRequest):
 	def get(self, screen_name):
-		r = requests.get(self.resource, params={'screen_name': screen_name, 'count': 200}, headers=self.config)
+		r = requests.get(self.resource, params={'screen_name': screen_name, 'count': limit}, headers=self.config)
 		return r.json()
 
 class Count(BaseRequest):
 	def get(self, screen_name):
 		r = requests.get(self.resource, params={'screen_name': screen_name}, headers=self.config)
-		return r.json()
+		temp = r.json()
+		return temp['statuses_count']
+
+parser = Punctuation()
 
 auth = Auth(base_url, 'oauth2/token', config)
 auth_obj = auth.get()
 
 count = Count(base_url, '1.1/users/show.json', auth_obj)
-count_obj = count.get('axschech')
-
-print count_obj['statuses_count']
+num = count.get('axschech')
 
 tweets = Tweets(base_url, '1.1/statuses/user_timeline.json', auth.get())
 collection = tweets.get('axschech')
 i = 0
-try:
-	print collection[1]['retweeted_status']
-	print collection[1]['quoted_status']
-except Exception, e:
-	print str(e)
-# for item in collection:
-# 	i = i + 1
-# 	print "\n" + str(i) + "\n"
-# 	print "\n" + str(item['retweeted']) + "\n"
-# 	print "\n" + item['text'] + "\n"
+for item in collection:
+	i = i + 1
+	try:
+		item['retweeted_status']
+		item['quoted_status']
+	except Exception, e:
+		parser.count(item['text'])
+
+print parser.items
+
