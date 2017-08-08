@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var button = document.getElementById(
+            'button'
+        ), input = document.getElementById(
+            'input'
+        ), result = document.getElementById(
+            'result'
+        ), clap = '👏 ';
+
+        button.addEventListener("click",  function () {
+            var value = input.value;
+            value += ' ';
+            result.innerText = value.replace(new RegExp('[' + ' ' + ']', 'g'), clap);
+        });
+    });
+    </script>
+    <title>Add Claps</title>
+</head>
+<body>
+    <input type="text" id="input" style="width:100%" />
+    <button type="button" id="button">Add Claps</button>
+    <div id="result"></div>
+</body>
+</html>
