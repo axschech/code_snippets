@@ -1,28 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var button = document.getElementById(
             'button'
         ), input = document.getElementById(
             'input'
+        ), form = document.getElementById(
+            'form'
         ), result = document.getElementById(
             'result'
-        ), clap = '👏 ';
-
-        button.addEventListener("click",  function () {
-            var value = input.value;
+        ), clap = '👏 ',
+        strs = [],
+        action = function (e) {
+            e.preventDefault();
+            var value = input.value.trim();
+            if (value === "") {
+                return;
+            }
             value += ' ';
-            result.innerText = value.replace(new RegExp('[' + ' ' + ']', 'g'), clap);
-        });
+            strs.unshift(value.replace(new RegExp('[' + ' ' + ']', 'g'), clap));
+            result.innerText = strs.join('\n');
+
+            input.value = '';
+        };
+
+        form.addEventListener('submit', action);
+
+        input.focus();
+
     });
     </script>
     <title>Add Claps</title>
 </head>
 <body>
-    <input type="text" id="input" style="width:100%" />
-    <button type="button" id="button">Add Claps</button>
-    <div id="result"></div>
+    <div class="container">
+        <h1>Add Claps</h1>
+        <form class="form" id="form">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <input type="text" id="input" class="form-control input-lg" placeholder="type stuff here to add claps" />
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="submit" id="button" class="form-control input-lg" style="margin: auto;">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <div id="result" style="font-size: 26px;"></div>
+    </div>
 </body>
 </html>
