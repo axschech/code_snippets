@@ -22,7 +22,7 @@
             var value = input.value.trim() + ' ',
             strippedValue = value.replace(new RegExp('[' + ' ' + ']', 'g'), clap),
             html;
-            console.log(strippedValue);
+
             if (value === "") {
                 return;
             }
@@ -34,7 +34,7 @@
                      '">'+
                      'tweet this</a>';
             html += '</p>';
-            console.log(html);
+
             strs.unshift(html);
             result.innerHTML = strs.join('');
 
@@ -51,7 +51,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Add Claps</h1>
+        <h1>Add Claps <small class="pull-right"><a href="http://axschech.com">axschech</a></small></h1>
         <form class="form" id="form" autocomplete="off">
             <div class="form-group">
                 <div class="row">
